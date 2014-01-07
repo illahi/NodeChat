@@ -1,4 +1,4 @@
-NodeJS Chat Server + Client 
+Basic NodeJS Chat Server + Client 
 ===========
 Just a very basic project I am working on to learn NodeJS (with the help of some very helpful tutorials online). Will update as I go along on this journey. Currently only basic chat functions work and timestamps.
 
