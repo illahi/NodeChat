@@ -15,3 +15,10 @@ You must have node and the libraries stated above installed on your computer. No
 1. In terminal, when in the directory, enter: node app.js
 2. In browser go to: http://localhost:3000
 
+
+Tutorial Sources:
+http://socket.io/#how-to-use
+http://coenraets.org/blog/2012/10/creating-a-rest-api-using-node-js-express-and-mongodb/
+http://psitsmike.com/2011/10/node-js-and-socket-io-multiroom-chat-tutorial/
+http://timeago.yarp.com/
+
