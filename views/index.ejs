@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script src="javascripts/jquery.timeago.js"></script>
+  </head>
+
+  <body>
+
+  	<!-- Socket interaction -->
+  	<!-- todo: move to own file -->
+	<script>
+		var socket = io.connect('http://localhost:3000');
+
+		// When the server emits new information update the view.
+		socket.on('updatechat', function (username, data, date) {
+			$('#conversation').append('<div class="box box-dark"><p class="highlight-orange">' + username + '</p><p class="highlight-green"><abbr class="timeago" title="' + date + '">July 17, 2008</abbr>' + '</p><div class="box-content">' + data + '</div></div>');
+			jQuery("abbr.timeago").timeago();
+		});
+
+		// When connected to the server, tell server the username.
+		socket.on('connect', function(){
+			socket.emit('adduser', prompt("What's your name?"));
+		});
+
+		// When client receives confirmation of successful connection, update view.
+		socket.on('confirmConnect', function() {
+			$('#conversation').append('<p>You are now connected.</p>');
+		});
+
+		// When server emits an update to the user list, update the view.
+		socket.on('updateusers', function(data) {
+			$('#users').empty();
+			$.each(data, function(key, value) {
+				$('#users').append('<div>' + key + '</div>');
+			});
+		});
+
+		// When the page loads, do this...
+		$(function(){
+			// When client user presses send, emit message to server.
+			$('#datasend').click( function() {
+				var message = $('#data').val();
+				$('#data').val('');
+				socket.emit('sendchat', message);
+			});
+
+			// When client user presses the enter key, 
+			// act as though send was pressed (defined above).
+			$('#data').keypress(function(e) {
+				if(e.which == 13) {
+					$(this).blur();
+					$('#datasend').focus().click();
+				}
+			});
+		});
+	</script>
+
+	<div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
+		<b>USERS</b>
+		<div id="users"></div>
+	</div>
+	<div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+		<div id="conversation"></div>
+		<input id="data" style="width:200px;" />
+		<input type="button" id="datasend" value="send" />
+	</div>
+	<br>
+	<div id="main">
+	</div>
+
+  </body>
+</html>
